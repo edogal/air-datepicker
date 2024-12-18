@@ -4,7 +4,8 @@
     Datepicker cell
    ------------------------------------------------- */
 
-.air-datepicker-cell {
+.air-datepicker-cell,
+.air-datepicker-cell--week-number {
   border-radius: var(--adp-cell-border-radius);
   box-sizing: border-box;
   cursor: pointer;
@@ -104,6 +105,19 @@
 
 .air-datepicker-cell.-year- {
   &.-other-decade-, {
+    @extend %otherMonth;
+  }
+}
+
+
+/*  Week number cell
+   ------------------------------------------------- */
+
+.air-datepicker-cell--week-number.-week-number- {
+  font-size: .8em;
+  color: var(--adp-color-secondary);
+
+  &.-other-month-, {
     @extend %otherMonth;
   }
 }

@@ -8,6 +8,7 @@ import {
     getDecade,
     getEl,
     getParsedDate,
+    getWeekNumber,
     isDateBigger,
     isDateSmaller,
     isSameDate,
@@ -73,7 +74,7 @@ export default class DatepickerBody {
 
     _buildBaseHtml() {
         this.$el = createElement({
-            className: `air-datepicker-body -${this.type}-`,
+            className: `air-datepicker-body -${this.type}- -has-week-numbers-`,
             innerHtml: templates[this.type]
         });
 
@@ -88,6 +89,10 @@ export default class DatepickerBody {
             curDay = firstDay,
             totalDays = 7,
             i = 0;
+
+        if (this.opts.showWeekNumbers) {
+            html += '<div class="air-datepicker-body--day-name -week-number-">#</div>';
+        }
 
         while (i < totalDays) {
             let day = curDay % totalDays;
@@ -204,7 +209,7 @@ export default class DatepickerBody {
             this.handleClick(e);
         }
 
-        if (onClickDayName && target.closest('.air-datepicker-body--day-name')) {
+        if (onClickDayName && target.closest('.air-datepicker-body--day-name:not(.-week-number-)')) {
             this.handleDayNameClick(e);
         }
     }
@@ -296,7 +301,20 @@ export default class DatepickerBody {
         this.destroyCells();
 
         this._generateCells();
-        this.cells.forEach((c) => {
+        this.cells.forEach((c, i) => {
+            if (this.opts.showWeekNumbers && i % 7 == 0) {
+                let allWeekOtherMonth = c.isOtherMonth && this.cells[i + 6].isOtherMonth;
+                let el = createElement('div');
+                el.classList.add('air-datepicker-cell--week-number', '-week-number-', '-disabled-');
+                if (allWeekOtherMonth) {
+                    el.classList.add('-other-month-');
+                }
+                el.textContent = getWeekNumber(c.date, this.dp.locale.firstDay);
+                if (allWeekOtherMonth && !this.opts.showOtherMonths) {
+                    el.textContent = '';
+                }
+                this.$cells.appendChild(el);
+            }
             this.$cells.appendChild(c.render());
         });
     }

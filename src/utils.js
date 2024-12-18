@@ -391,3 +391,34 @@ export function getWordBoundaryRegExp(sign) {
 
     return new RegExp('(^|>|' + symbols + ')(' + sign + ')($|<|' + symbols + ')', 'g');
 }
+
+/**
+ * Gets the week number.
+ *
+ * @param {Date} date
+ * @param {number} firstDay
+ * @return {number}
+ */
+export function getWeekNumber(date, firstDay) {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+
+    // Not perfect way to test if US start of the year, but good for now.
+    const isISO = (firstDay == 1);
+    let weekNumber;
+
+    if (isISO) {
+        // ISO 8601: week starts on Monday
+        const dayOfWeek = (d.getUTCDay() + 6) % 7;
+        d.setUTCDate(d.getUTCDate() - dayOfWeek + 3);
+        const firstThursday = new Date(Date.UTC(d.getUTCFullYear(), 0, 4)); // First thursday of the year
+        // 604800000 = Milliseconds in a week
+        weekNumber = 1 + Math.round((d - firstThursday) / 604800000);
+    } else {
+        // US: week starts on Sunday
+        const startOfYear = new Date(date.getFullYear(), 0, 1);
+        const days = Math.floor((date - startOfYear) / 86400000);
+        weekNumber = Math.ceil((days + startOfYear.getDay() + 1) / 7);
+    }
+
+    return weekNumber;
+}

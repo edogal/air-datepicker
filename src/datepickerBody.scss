@@ -8,6 +8,10 @@
   &.-hidden- {
     display: none;
   }
+
+  &.-has-week-numbers- {
+    --adp-body-columns-number: 8;
+  }
 }
 
 
@@ -16,7 +20,7 @@
 
 .air-datepicker-body--day-names {
   display: grid;
-  grid-template-columns: repeat(7, var(--adp-day-cell-width));
+  grid-template-columns: repeat(var(--adp-body-columns-number), var(--adp-day-cell-width));
   margin: 8px 0 3px;
 }
 
@@ -45,7 +49,7 @@
 .air-datepicker-body--cells {
   display: grid;
   &.-days- {
-    grid-template-columns: repeat(7, var(--adp-day-cell-width));
+    grid-template-columns: repeat(var(--adp-body-columns-number), var(--adp-day-cell-width));
     grid-auto-rows: var(--adp-day-cell-height);
   }
 

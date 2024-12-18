@@ -1,4 +1,4 @@
-import {createDate, getParsedDate} from '../src/utils';
+import {createDate, getParsedDate, getWeekNumber} from '../src/utils';
 import {describe, it, expect} from '@jest/globals';
 
 
@@ -31,4 +31,12 @@ describe('createDate', () => {
 
         expect(allEqual).toBeTruthy();
     });
+});
+
+describe('getWeekNumber', () => {
+    it('should return 42', () => {
+      const createdDate = createDate('2024-10-14');
+      const weekNumber = getWeekNumber(createdDate, 1);
+      expect(weekNumber === 42).toBeTruthy();
+    })
 });
